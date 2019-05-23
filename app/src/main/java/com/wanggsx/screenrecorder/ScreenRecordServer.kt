@@ -19,11 +19,6 @@ import android.os.Looper
 import android.os.Message
 import android.support.annotation.RequiresApi
 
-
-import com.hani.coolcode.R
-import com.hani.coolcode.utils.CommonUtil
-import com.hani.coolcode.utils.FileUtil
-
 import java.io.File
 import java.io.IOException
 
@@ -172,14 +167,14 @@ class ScreenRecordService : Service(), Handler.Callback {
         mMediaProjection = null
 
         mHandler!!.removeMessages(MSG_TYPE_COUNT_DOWN)
-        ScreenUtil.stopRecord(tip)
+        ScreenUtil.stopRecord(tip!!)
 
         if (mRecordSeconds <= 2) {
 
-            FileUtil.deleteSDFile(recordFilePath)
+            //Utils.deleteSDFile(recordFilePath)
         } else {
             //通知系统图库更新
-            FileUtil.fileScanVideo(this, recordFilePath, mRecordWidth, mRecordHeight, mRecordSeconds)
+            Utils.fileScanVideo(this, recordFilePath!!, mRecordWidth, mRecordHeight, mRecordSeconds)
         }
 
         //        mRecordFilePath = null;
@@ -254,14 +249,14 @@ class ScreenRecordService : Service(), Handler.Callback {
             MSG_TYPE_COUNT_DOWN -> {
 
                 var str: String? = null
-                val enough = FileUtil.getSDFreeMemory() / (1024 * 1024) < 4
-                if (enough) {
-                    //空间不足，停止录屏
-                    str = getString(R.string.record_space_tip)
-                    stopRecord(str)
-                    mRecordSeconds = 0
-                    break
-                }
+//                val enough = FileUtil.getSDFreeMemory() / (1024 * 1024) < 4
+//                if (enough) {
+//                    //空间不足，停止录屏
+//                    str = getString(R.string.record_space_tip)
+//                    stopRecord(str)
+//                    mRecordSeconds = 0
+//                    break
+//                }
 
                 mRecordSeconds++
                 var minute = 0
@@ -277,7 +272,7 @@ class ScreenRecordService : Service(), Handler.Callback {
                 if (mRecordSeconds < 3 * 60) {
                     mHandler!!.sendEmptyMessageDelayed(MSG_TYPE_COUNT_DOWN, 1000)
                 } else if (mRecordSeconds == 3 * 60) {
-                    str = getString(R.string.record_time_end_tip)
+                    str = "录屏时间到(3分钟)"
                     stopRecord(str)
                     mRecordSeconds = 0
                 }

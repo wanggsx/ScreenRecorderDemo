@@ -15,7 +15,7 @@ import android.widget.TextView
 
 import android.support.v4.content.PermissionChecker.PERMISSION_DENIED
 
-class ScreenRecordActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mTvStart: TextView? = null
     private var mTvEnd: TextView? = null
@@ -28,19 +28,19 @@ class ScreenRecordActivity : AppCompatActivity(), View.OnClickListener {
 
     private val recordListener = object : ScreenUtil.RecordListener {
         override fun onStartRecord() {
-
+            UtilsToast.show(this@MainActivity, "onStartRecord")
         }
 
         override fun onPauseRecord() {
-
+            UtilsToast.show(this@MainActivity, "onPauseRecord")
         }
 
         override fun onResumeRecord() {
-
+            UtilsToast.show(this@MainActivity, "onResumeRecord")
         }
 
         override fun onStopRecord(stopTip: String) {
-            UtilsToast.show(this@ScreenRecordActivity, stopTip)
+            UtilsToast.show(this@MainActivity, stopTip)
         }
 
         override fun onRecording(timeTip: String) {
@@ -95,13 +95,13 @@ class ScreenRecordActivity : AppCompatActivity(), View.OnClickListener {
             if (temp == PERMISSION_DENIED) {
                 val dialog = AlertDialog.Builder(this).setTitle("申请权限").setMessage("这些权限很重要").setNegativeButton(
                     "取消"
-                ) { dialog, which -> UtilsToast.show(this@ScreenRecordActivity, "取消") }.setPositiveButton(
+                ) { dialog, which -> UtilsToast.show(this@MainActivity, "取消") }.setPositiveButton(
                     "设置"
                 ) { dialog, which ->
                     val intent = Intent()
                     intent.action = android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    intent.data = Uri.parse("package:" + this@ScreenRecordActivity.packageName)
-                    this@ScreenRecordActivity.startActivity(intent)
+                    intent.data = Uri.parse("package:" + this@MainActivity.packageName)
+                    this@MainActivity.startActivity(intent)
                 }.create()
                 dialog.show()
                 break
